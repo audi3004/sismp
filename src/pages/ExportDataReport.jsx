@@ -8,7 +8,6 @@ import {
    Users,
    ShieldCheck,
    Database,
-   Calendar,
    ArrowRight,
    Sparkles,
    AlertCircle,
@@ -17,6 +16,7 @@ import {
 } from "lucide-react";
 import axios from "axios";
 import { useLoading } from "../components/LoadingMask.jsx";
+import CalendarMonthPicker from "../components/CalendarMonthPicker.jsx";
 
 export default function ExportDataReport() {
    const { showLoading, hideLoading } = useLoading();
@@ -150,7 +150,9 @@ export default function ExportDataReport() {
             });
             if (res.data && res.data.status === "success") {
                const rawPerf = res.data.data;
-               const combinedList = [
+               // allPerformers contains every matching record. Keep the
+               // categorized lists as a fallback for older backend versions.
+               const combinedList = rawPerf.allPerformers || [
                   ...(rawPerf.topPerformers || []),
                   ...(rawPerf.midPerformers || []),
                   ...(rawPerf.bottomPerformers || []),
@@ -195,13 +197,18 @@ export default function ExportDataReport() {
       const selectedUnitName =
          unitOptions.find((o) => o.idUnit === selectedUnitId)?.fullName ||
          "Seluruh Regional";
+      const periodLabel = new Intl.DateTimeFormat("id-ID", {
+         month: "long",
+         year: "numeric",
+         timeZone: "UTC",
+      }).format(new Date(`${selectedPeriod}-01T00:00:00Z`));
 
       // Standardized Premium metadata sheets block inside excel format
       csvContent += "=== LAPORAN EVALUASI OPERASIONAL PLN YANTEK ===\n";
       csvContent += `Kategori Data;${dataType.toUpperCase() === "UNIT" ? "DATA MASTER UNIT KERJA" : dataType.toUpperCase() === "PETUGAS" ? "DATA MASTER PETUGAS LAPANGAN" : "REKAP DAN ANALISIS PERFORMA EVALUASI"}\n`;
       csvContent += `Filter Wilayah Unit;${selectedUnitName}\n`;
       if (dataType === "performa") {
-         csvContent += `Periode Evaluasi;${selectedPeriod} (${selectedPeriod === "2026-06" ? "Juni 2026" : selectedPeriod === "2026-05" ? "Mei 2026" : "April 2026"})\n`;
+         csvContent += `Periode Evaluasi;${selectedPeriod} (${periodLabel})\n`;
       }
       csvContent += `Waktu Export;${timestamp} WIB\n`;
       csvContent +=
@@ -488,66 +495,11 @@ export default function ExportDataReport() {
                   </p>
                </div>
             ) : (
-               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-                  {[
-                     {
-                        id: "2026-06",
-                        name: "Juni 2026",
-                        note: "Tren Proyeksi Triwulan II",
-                     },
-                     {
-                        id: "2026-05",
-                        name: "Mei 2026",
-                        note: "Rekap Audit Historis",
-                     },
-                     {
-                        id: "2026-04",
-                        name: "April 2026",
-                        note: "Rekap Evaluasi Kuartal Awal",
-                     },
-                  ].map((p) => {
-                     const isSelected = selectedPeriod === p.id;
-                     return (
-                        <button
-                           key={p.id}
-                           type="button"
-                           onClick={() => setSelectedPeriod(p.id)}
-                           className={`glass-panel p-4.5 rounded-2xl text-left border-2 transition-all duration-300 cursor-pointer flex flex-col justify-between relative overflow-hidden select-none ${
-                              isSelected
-                                 ? "border-emerald-600 bg-emerald-50/55 shadow-md shadow-emerald-500/10 scale-[1.02] ring-4 ring-emerald-500/10"
-                                 : "border-slate-100 bg-white hover:border-slate-300 hover:scale-[1.01]"
-                           }`}
-                        >
-                           {isSelected && (
-                              <div className="absolute left-0 top-0 bottom-0 w-2.5 bg-emerald-600" />
-                           )}
-
-                           <div className="flex items-center justify-between">
-                              <Calendar
-                                 className={`w-5 h-5 ${isSelected ? "text-emerald-600" : "text-slate-400"}`}
-                              />
-                              {isSelected ? (
-                                 <span className="flex items-center gap-1 text-[9px] font-black text-emerald-650 tracking-wider uppercase font-mono bg-emerald-100/60 px-2 py-0.5 rounded-md">
-                                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />{" "}
-                                    Aktif
-                                 </span>
-                              ) : (
-                                 <span className="w-2.5 h-2.5 rounded-full bg-slate-200" />
-                              )}
-                           </div>
-                           <div
-                              className={`mt-5.5 ${isSelected ? "pl-2" : ""}`}
-                           >
-                              <h5 className="font-extrabold text-slate-850 text-xs uppercase font-mono">
-                                 {p.name}
-                              </h5>
-                              <p className="text-[10px] text-slate-400 font-black uppercase mt-1.5 font-mono">
-                                 {p.note}
-                              </p>
-                           </div>
-                        </button>
-                     );
-                  })}
+               <div className="max-w-sm">
+                  <CalendarMonthPicker
+                     value={selectedPeriod}
+                     onChange={setSelectedPeriod}
+                  />
                </div>
             )}
          </div>
