@@ -1,0 +1,6 @@
+{
+  "name": "Monitoring Kinerja Pelayanan Teknik PLN",
+  "description": "Sistem Pengambil Keputusan Monitoring Kinerja Pelayanan Teknik PT PLN Electricity Services dengan visualisasi performa, kepatuhan K3, dan detail data karyawan.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
