@@ -38,8 +38,7 @@ export default function DashboardKepatuhanK3() {
    const [errorMsg, setErrorMsg] = useState("");
    const { showLoading, hideLoading } = useLoading();
 
-   const backendHost = window.location.hostname || "localhost";
-   const apiBaseUrl = `http://${backendHost}:3001/api`;
+   const apiBaseUrl = "/api";
 
    const fetchK3Dashboard = async () => {
       setLoading(true);

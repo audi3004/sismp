@@ -28,8 +28,7 @@ export default function ExportDataReport() {
    const [rawUnits, setRawUnits] = useState([]);
    const [rawPetugas, setRawPetugas] = useState([]);
 
-   const backendHost = window.location.hostname || "localhost";
-   const apiBaseUrl = `http://${backendHost}:3001/api`;
+   const apiBaseUrl = "/api";
 
    // Standard UP Units lookup matching other dashboards
    const unitOptions = [

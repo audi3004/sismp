@@ -45,8 +45,7 @@ export default function PerformaMaster() {
       setCurrentPage(1);
    }, [search, selectedPeriod, selectedUnitId]);
 
-   const backendHost = window.location.hostname || "localhost";
-   const apiBaseUrl = `http://${backendHost}:3001/api`;
+   const apiBaseUrl = "/api";
 
    const triggerAlert = (msg, type = "success") => {
       setAlertMsg(msg);

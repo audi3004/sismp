@@ -65,8 +65,7 @@ export default function UnitMaster() {
       "001": true,
    });
 
-   const backendHost = window.location.hostname || "localhost";
-   const apiBaseUrl = `http://${backendHost}:3001/api`;
+   const apiBaseUrl = "/api";
 
    const triggerAlert = (msg, type = "success") => {
       setAlertMsg(msg);

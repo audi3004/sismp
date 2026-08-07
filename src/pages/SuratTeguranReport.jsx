@@ -125,7 +125,7 @@ export default function SuratTeguranReport() {
    // 1. Fetch static list of units
    const loadUnitsData = async () => {
       try {
-         const unitsRes = await axios.get("http://localhost:3001/api/units");
+         const unitsRes = await axios.get("/api/units");
          const filteredUnits = unitsRes.data.data
             .filter((item) => {
                const isRoot001 = item.idUnit === "001.";
@@ -164,7 +164,7 @@ export default function SuratTeguranReport() {
       try {
          // Query performa metrics directly to filter out bad performers (finalScore < 60)
          const resPerforma = await axios.get(
-            "http://localhost:3001/api/bottom-performa-petugas",
+            "/api/bottom-performa-petugas",
             {
                params: { period: selectedPeriod, unitId: selectedUnitId },
             },

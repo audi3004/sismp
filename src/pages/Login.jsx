@@ -15,8 +15,7 @@ export default function Login({ setAuth }) {
       setLoading(true);
 
       try {
-         const backendHost = window.location.hostname || "localhost";
-         const apiUrl = `http://${backendHost}:3001/api/login`;
+         const apiUrl = "/api/login";
 
          const response = await axios.post(apiUrl, {
             username,

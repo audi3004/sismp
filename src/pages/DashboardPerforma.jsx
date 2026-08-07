@@ -52,8 +52,7 @@ export default function DashboardPerforma() {
       bottomPerformers: [],
    });
 
-   const backendHost = window.location.hostname || "localhost";
-   const apiBaseUrl = `http://${backendHost}:3001/api`;
+   const apiBaseUrl = "/api";
 
    // Fetch Units static list on initial mount once
    const loadUnits = async () => {
